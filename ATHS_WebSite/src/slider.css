@@ -1,0 +1,23 @@
+.txt{
+
+    font-family: 'Helvetica', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 23px;
+
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #000000;
+}
+
+.divSlider{
+    height: 30px;
+    padding-bottom: 15px;
+    border-bottom-width:0.5px;
+    border-bottom-color: black;
+    border-bottom-style: double;
+}
