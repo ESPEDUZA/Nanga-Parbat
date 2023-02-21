@@ -10,7 +10,7 @@ This is a decentralized marketplace built for the sale and purchase of non-fungi
 
 To run the project on your local machine, follow these steps:
 
-Clone the repository: git clone https://github.com/username/repository-name.git
+Clone the repository: git clone https://github.com/ESPEDUZA/Nanga-Parbat.git
 Install the necessary dependencies for the frontend: cd frontend && npm install
 Install the necessary dependencies for the backend: cd ../backend && npm install
 Start the frontend: npm start
