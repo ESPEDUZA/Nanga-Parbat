@@ -24,5 +24,4 @@ function WalletConnectButton({ web3 }) {
         </button>
     );
 }
-
 export default WalletConnectButton;

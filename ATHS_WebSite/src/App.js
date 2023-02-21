@@ -39,7 +39,7 @@ class App extends Component {
         <AutoPlay />
         <div id="container">
           <div id="leftbox">
-            <img src="./logo192.png" alt="logo" width="100" height="100" />
+            <img src="./Art_Hunters.png" alt="logo" width="120" height="120" />
           </div>
           <div id="middlebox">
             <h1 className="title">ART HUNTERS.</h1>
