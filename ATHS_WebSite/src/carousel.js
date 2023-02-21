@@ -11,6 +11,7 @@ const Carousel = () => {
     const [hoveredIndex, setHoveredIndex] = useState(null);
 
     return (
+
         <div className="carousel">
             <div className="images-container">
                 {images.map((image, index) => (

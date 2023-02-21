@@ -35,6 +35,7 @@ export default class AutoPlay extends Component {
         };
 
         return (
+
             <div className="divSlider">
                 <Slider {...settings}>
                     <div>
