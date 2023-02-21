@@ -1,7 +1,6 @@
 <h1>ART HUNTERS. WIP</h1>
 
-<img width="809" alt="Screenshot 2023-02-16 at 13 43 33" src="https://user-images.githubusercontent.com/75570746/219368059-bc87de8d-ef0c-46fe-93cd-844891c04cae.png">
-
+<img width="1512" alt="Screenshot 2023-02-21 at 10 40 53" src="https://user-images.githubusercontent.com/75570746/220309019-bbf081a1-1778-4884-9430-4e808e2c6823.png">
 
 
 This is a decentralized marketplace built for the sale and purchase of non-fungible tokens (NFTs). The marketplace allows for the creation of auctions and bidding on NFTs using cryptocurrency. The technologies used in the project include React, Node.js, Solidity, and MongoDB.
