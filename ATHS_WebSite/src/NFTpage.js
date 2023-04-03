@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { css } from "@emotion/react";
+import { SyncLoader } from "react-spinners";
+import "./NFTpage.css";
 
 const NftPage = ({ account }) => {
     const [nfts, setNfts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const MORALIS_API_KEY = "qlm1Kks4ON1tljvmpQI1xaBI9w6u1GA19XMGUnheDE6dHBJ5oBp4663m9bssGyxn";
 
     useEffect(() => {
@@ -9,6 +13,7 @@ const NftPage = ({ account }) => {
             if (!account) return;
             const fetchedNFTs = await fetchMoralisNFTs(account, MORALIS_API_KEY);
             setNfts(fetchedNFTs);
+            setLoading(false);
         }
 
         fetchNFTs();
@@ -22,7 +27,7 @@ const NftPage = ({ account }) => {
         };
 
         try {
-            const response = await fetch(url, { headers });
+            const response = await fetch(url, {headers});
             if (!response.ok) {
                 const errorData = await response.json();
                 console.error("Moralis API error response:", errorData);
@@ -63,7 +68,7 @@ const NftPage = ({ account }) => {
                     }
 
                     const metadata = await metadataResponse.json();
-                    const image = metadata.image.replace('ipfs://', '');
+                    const image = metadata.image.replace("ipfs://", "");
 
                     return {
                         contractAddress: asset.token_address,
@@ -81,24 +86,28 @@ const NftPage = ({ account }) => {
         }
     }
 
-
-
-
-    if (!nfts) {
-        return <div>Loading...</div>;
-    }
-
     return (
         <div className="nft-grid">
-            {nfts.map((nft, index) => (
-                <div key={index} className="nft-card">
-                    <img src={nft.image} alt={nft.name} />
-                    <h3>{nft.name}</h3>
-                    <p>ID: {nft.tokenID}</p>
+            {loading ? (
+                <div className="loader-container">
+                    <SyncLoader color="#04d9ff"/>
                 </div>
-            ))}
+            ) : (
+                nfts.map((nft, index) => (
+                    <div key={index} className="nft-card">
+                        {nft.image ? (
+                            <img src={nft.image} alt={nft.name}/>
+                        ) : (
+                            <div className="no-image">
+                                <p>No image available</p>
+                            </div>
+                        )}
+                        <h3>{nft.name}</h3>
+                        <p>ID: {nft.tokenID}</p>
+                    </div>
+                ))
+            )}
         </div>
     );
-};
-
+}
 export default NftPage;
