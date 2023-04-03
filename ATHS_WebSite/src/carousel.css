@@ -12,13 +12,13 @@
     justify-content: space-between;
     align-items: center;
     height: 80%;
-    margin-bottom: 35px;
+    margin-bottom: 15px;
 }
 
 .image-container {
     position: relative;
     height: 100%;
-    margin: 0 50px;
+    margin: 0 20px;
     transition: all 0.4s;
     filter: drop-shadow(8px 12px 12px rgba(0, 0, 0, 0.25));
 }
@@ -43,14 +43,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 15%;
+    margin-top: 10%;
 
 }
 
 .square {
     width: 15px;
     height: 15px;
-    margin: 0 20px;
+    margin: 0 10px;
     border: 1px solid black;
     background-color: white;
 }

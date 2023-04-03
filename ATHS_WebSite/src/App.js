@@ -8,6 +8,7 @@ import NFTpage from "./NFTpage";
 import Web3 from "web3";
 import {BrowserRouter, Switch, Route, Link, Routes, useLocation} from "react-router-dom";
 import WalletConnectButton from "./WalletConnectButton";
+import NftPage from "./NFTpage";
 
 function App() {
     const [web3, setWeb3] = useState(null);
@@ -62,7 +63,7 @@ function App() {
             </div>
             <Routes>
                 <Route path="/" element={<Carousel />} />
-                <Route path="/nfts" element={<NFTpage />} />
+                <Route path="/nfts" element={<NftPage account={accounts} />} />
             </Routes>
         </div>
     );
