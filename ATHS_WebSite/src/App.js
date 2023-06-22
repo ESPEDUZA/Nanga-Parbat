@@ -4,11 +4,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import AutoPlay from "./slider";
 import Carousel from "./carousel";
+
 import NFTpage from "./NFTpage";
 import Web3 from "web3";
 import {BrowserRouter, Switch, Route, Link, Routes, useLocation} from "react-router-dom";
 import WalletConnectButton from "./WalletConnectButton";
 import NftPage from "./NFTpage";
+import auctionsPages from "./auctionsPages";
+import CustomNFT from "./CustomNFT";
+import Auctions from "./Auctions";
+
 
 function App() {
     const [web3, setWeb3] = useState(null);
@@ -28,6 +33,8 @@ function App() {
 
     const location = useLocation();
     const isNftsRoute = location.pathname === "/nfts";
+    const isCustomNftRoute = location.pathname === "/customnft";
+    const isAuctionsRoute = location.pathname === "/auctions"
 
     const buttonLabel = accounts
         ? `${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`
@@ -55,15 +62,23 @@ function App() {
                 <Link to="/nfts">
                     <button className="menuButton">NFT’S</button>
                 </Link>
-                <button className="menuButton">AUCTIONS</button>
-                <button className="menuButton">PROFILE</button>
+                <Link to="/auctions">
+                    <button className="menuButton">AUCTIONS</button>
+                </Link>
+                <Link to="/customnft">
+                    <button className="menuButton">CUSTOM NFT</button>
+                </Link>
+
             </div>
             <div>
-                <h2 className="secondTitle">{isNftsRoute ? "NFT's" : "TRENDING THIS WEEK"}</h2>
+                <h2 className="secondTitle">{isNftsRoute ? "Your NFT's" : "TRENDING THIS WEEK"+ isCustomNftRoute ? "MINT YOUR OWN NFT !" : "TRENDING THIS WEEK" } </h2>
             </div>
+
             <Routes>
                 <Route path="/" element={<Carousel />} />
                 <Route path="/nfts" element={<NftPage account={accounts} />} />
+                <Route path="/customnft" element={<CustomNFT account={accounts} />} />
+                <Route path="/auctions" element={<Auctions/>} />
             </Routes>
         </div>
     );
