@@ -31,12 +31,31 @@ a {
     box-sizing: border-box;
     flex: 1 0 20%;
     margin: 1%;
+    position: relative;
+    min-height: 200px; /* Adjust this value as needed to fit your images */
+
 }
 
-.nft-item img {
-    max-width: 100%;
+.nft-item .img-container {
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%; /* Adjust this value based on the aspect ratio of your images */
+    position: relative;
+    overflow: hidden;
+}
+
+.nft-item .img-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: auto;
-    flex: 1 0 20%;
+    object-fit: cover; /* This will ensure the image covers the entire space of the container. */
+    transition: transform 0.3s ease-in-out;
+}
+
+.nft-item .img-container img:hover {
+    transform: scale(1.1);
 }
 
 .nft-items {
@@ -44,8 +63,9 @@ a {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-
     margin: 15px auto;
+    position: relative;
+    overflow: hidden;
 }
 
 .nft-item .name {
@@ -94,7 +114,7 @@ a {
     gap: 20px;
 }
 
-.title{
+.NFT-title{
     color: #000;
     font-size: 36px;
     font-family: Helvetica;

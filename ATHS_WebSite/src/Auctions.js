@@ -164,7 +164,7 @@ function Auctions() {
         return (
             <div className="mainContainer">
                 <div className="nft-info">
-                    <h1 className="title">{selectedNft.name}</h1>
+                    <h1 className="NFT-title">{selectedNft.name}</h1>
                     <img src={selectedNft.image} alt={selectedNft.name} />
                     <p className="description">{selectedNft.description}</p>
                     <p><strong style={{fontWeight:'700'}}>Owner Address :</strong> {selectedNft.ownerAddress}</p>
@@ -207,7 +207,7 @@ function Auctions() {
             <div className="nft-items">
                 {items.map((nft, i) => (
                     <div key={i} className="nft-item">
-                        <img src={nft.image} alt={nft.name} />
+                        <div className="img-container"><img src={nft.image} alt={nft.name} /></div>
                         <div style={{fontSize:'22px', fontFamily:'Helvetica', paddingTop:'10px', paddingBottom:'0px', fontWeight:'700'}}>{nft.name}</div>
                         <div style={{display:'flex', flexDirection:'row', flexWrap: 'wrap', justifyContent: 'space-between', alignItems:'center'}}>
                             <p style={{fontSize:'22px', fontFamily:'Helvetica', paddingTop:'22px'}}>LAST BID : {nft.currentBid} ETH</p>
