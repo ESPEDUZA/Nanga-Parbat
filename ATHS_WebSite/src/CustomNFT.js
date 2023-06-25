@@ -1,98 +1,45 @@
-import React, { useState, useCallback } from 'react';
-import { create } from 'ipfs-http-client';
-import { ethers } from 'ethers';
-import { Web3Provider } from '@ethersproject/providers';
-import './CustomNft.css';
+import React, {useCallback, useState} from 'react';
+import { useForm } from 'react-hook-form';
+import { useDropzone } from 'react-dropzone';
 
-const ipfs = create({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
-const provider = new Web3Provider(window.ethereum);
-
-const CustomNFT = ({ account }) => {
-    const [tokenURI, setTokenURI] = useState('');
-    const [contractAddress] = useState('0xYourContractAddress');
-    const [dragging, setDragging] = useState(false);
-    const [file, setFile] = useState(null);
-    const [preview, setPreview] = useState(null);
-    const [name, setName] = useState('');
-    const [traits, setTraits] = useState('');
-
-    const handleDrop = useCallback((event) => {
-        event.preventDefault();
-
-        const [file] = event.dataTransfer.files;
-        if (!file) return;
-
-        setFile(file);
-        setDragging(false);
-
-        const reader = new FileReader();
-        reader.onloadend = async function () {
-            const buffer = Buffer.from(reader.result);
-            const result = await ipfs.add(buffer);
-            setTokenURI('https://ipfs.infura.io/ipfs/' + result.path);
-        };
-        reader.readAsArrayBuffer(file);
-
-        reader.onload = () => {
-            setPreview(reader.result);
-        };
-    }, []);
-
-    const handleDragEnter = useCallback((event) => {
-        event.preventDefault();
-        setDragging(true);
-    }, []);
-
-    const handleDragLeave = useCallback((event) => {
-        event.preventDefault();
-        setDragging(false);
-    }, []);
-
-    const handleDragOver = useCallback((event) => {
-        event.preventDefault();
-    }, []);
-
-    const mintNFT = async () => {
-        const signer = provider.getSigner();
-        const contract = new ethers.Contract(contractAddress, [
-            'function mintNFT(address recipient, string memory tokenURI, string memory name, string memory traits) public returns (uint256)',
-        ], signer);
-        const transaction = await contract.mintNFT(account, tokenURI, name, traits);
-        await transaction.wait();
-    };
+const CustomNFT = () => {
+    const [file, setFile] = useState(null)
+    const onDrop = useCallback(acceptedFiles => {
+        setFile(URL.createObjectURL(acceptedFiles[0]))
+    }, [])
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+    const { register, handleSubmit } = useForm();
+    const onSubmit = data => console.log(data);
 
     return (
-        <div className="custom">
-            <div
-                className={`drag-drop-area${dragging ? ' dragging' : ''}`}
-                onDrop={handleDrop}
-                onDragEnter={handleDragEnter}
-                onDragLeave={handleDragLeave}
-                onDragOver={handleDragOver}
-            >
-                {preview ? (
-                    <img src={preview} alt="Preview" className="image-preview" />
-                ) : dragging ? (
-                    <p>Drop your file here</p>
-                ) : (
-                    <p>Drag a file here to upload, or click to select a file</p>
+        <div className="mainContainer flex">
+            <div className="nft-info w-1/2 p-4 border-r">
+                <h1 className="NFT-title">Let's create your own NFT</h1>
+                {!file && (
+                    <div {...getRootProps()} className="w-full h-64 border-2 border-gray-300 rounded flex items-center justify-center my-4 cursor-pointer">
+                        <input {...getInputProps()} />
+                        {
+                            isDragActive ?
+                                <p>Drop the file here ...</p> :
+                                <p>Drag 'n' drop your NFT image here, or click to select a file</p>
+                        }
+                    </div>
                 )}
+                {file && <img src={file} alt="NFT Preview" className="w-full h-64 object-cover rounded"/>}
             </div>
-            <div className="nft-options">
-                <input
-                    placeholder="Name of NFT"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                />
-                <input
-                    placeholder="Traits of NFT"
-                    value={traits}
-                    onChange={e => setTraits(e.target.value)}
-                />
+            <div style={{fontFamily:'Helvetica'}} className="auction-details w-1/2 p-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
+                    <input {...register('name')} type="text" placeholder="NFT Name" className="border p-2"/>
+                    <textarea {...register('description')} placeholder="Description" className="border p-2"/>
+                    <input {...register('creatorAddress')} type="text" placeholder="Creator Address" className="border p-2"/>
+                    <input {...register('Trait1')} type="text" placeholder="Trait 1" className="border p-2"/>
+                    <input {...register('Trait2')} type="text" placeholder="Trait 2" className="border p-2"/>
+                    <input {...register('Trait3')} type="text" placeholder="Trait 3" className="border p-2"/>
+                    <button type="submit" className="border p-2">Submit</button>
+                </form>
             </div>
-            <button className="mint-button" onClick={mintNFT}>Mint NFT</button>
         </div>
-    );
-};
+    )
+}
 
 export default CustomNFT;
