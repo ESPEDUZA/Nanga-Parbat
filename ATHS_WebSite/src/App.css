@@ -1,0 +1,171 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+#leftbox {
+  float:left;
+  background:#FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:25%;
+  height:160px;
+}
+#middlebox{
+  float:left;
+  background:#FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:50%;
+  height:160px;
+  text-align: center;
+}
+#rightbox{
+  float:right;
+  background:#FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:25%;
+  height:160px;
+}
+
+.menu{
+  text-align: center;
+  justify-content: space-between;
+}
+
+.menuButton{
+  position: relative;
+  display: inline-block;
+  padding: 10px 10px;
+  text-align: center;
+  font-size: 18px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  color: #000000;
+  background: transparent;
+  cursor: pointer;
+  transition: ease-out 0.5s;
+  border: 2px solid #FFFFFF;
+  margin: 15px 160px;
+
+}
+
+.menuButton:hover {
+  color: white;
+  box-shadow: inset 0 -100px 0 0 #000000;
+}
+
+.menuButton:active {
+  transform: scale(0.9);
+}
+
+.walletButton {
+  position: relative;
+  display: inline-block;
+  margin: 15px;
+  padding: 10px 10px;
+  text-align: center;
+  font-size: 18px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  color: #000000;
+  background: transparent;
+  cursor: pointer;
+  transition: ease-out 0.5s;
+  border: 2px solid #000000;
+  box-shadow: inset 0 0 0 0 #000000;
+}
+
+.walletButton:hover {
+  color: white;
+  box-shadow: inset 0 -100px 0 0 #000000;
+}
+
+.walletButton:active {
+  transform: scale(0.9);
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.top-slider{
+   position: absolute;
+   width: 1920px;
+   height: 0px;
+   border: 0.5px solid #595353;
+}
+
+ .topNavBar{
+   display: flex;
+   height: 120PX;
+   justify-content: center;
+   align-items: center;
+   padding-top: 30px;
+   background-color: #61dafb;
+ }
+ .title{
+   width: 477px;
+   height: 74px;
+   font-family: 'Helvetica', serif;
+   font-style: normal;
+   font-weight: 800;
+   font-size: 64px;
+
+   /* identical to box height */
+   position: relative;
+   top: 25%;
+   left: 33%;
+   transform: translate(-50%, -50%);
+
+   color: #000000;
+
+ }
+
+.secondTitle{
+  padding-left: 220px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  font-family: 'Helvetica', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 28px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #000000;
+}

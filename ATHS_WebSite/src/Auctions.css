@@ -1,0 +1,200 @@
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+h1, h2, h3 {
+    color: #000;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+.nft-item {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    flex: 1 0 20%;
+    margin: 1%;
+    position: relative;
+    min-height: 200px; /* Adjust this value as needed to fit your images */
+
+}
+
+.nft-item .img-container {
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%; /* Adjust this value based on the aspect ratio of your images */
+    position: relative;
+    overflow: hidden;
+}
+
+.nft-item .img-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* This will ensure the image covers the entire space of the container. */
+    transition: transform 0.3s ease-in-out;
+}
+
+.nft-item .img-container img:hover {
+    transform: scale(1.1);
+}
+
+.nft-items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 15px auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.nft-item .name {
+    font-size: 1.2em;
+    color: #000;
+    height: 64px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nft-item .description {
+    color: #333;
+    height: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nft-item .price {
+    font-size: 1.2em;
+    color: #000;
+}
+
+.nft-item .buy-button {
+    display: inline-block;
+    background-color: #000;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.mainContainer {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+/* Colonne d'informations sur le NFT */
+.nft-info {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.NFT-title{
+    color: #000;
+    font-size: 36px;
+    font-family: Helvetica;
+    font-weight: 700;
+    text-align: left;
+}
+.description{
+    color: #514C4C;
+    text-align: center;
+    font-size: 16px;
+    font-family: Helvetica;
+}
+.timer{
+    color: #000;
+    font-size: 32px;
+    font-family: Helvetica;
+    font-weight: 700;
+}
+.nft-info img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #000;
+}
+
+/* Colonne de détails sur l'enchère */
+.auction-details {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Style pour le timer */
+.auction-details .timer {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+/* Style pour le formulaire de nouvelle enchère */
+.new-bid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mainPageDisplay{
+
+}
+
+.traits{
+    padding-top: 30px;
+    color: #000;
+    font-size: 32px;
+    font-family: Helvetica;
+    font-weight: 700;
+}
+
+.return{
+    padding-top: 100px;
+    position: relative;
+    display: inline-block;
+    padding: 10px 10px;
+    text-align: center;
+    font-size: 18px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: #000000;
+    background: transparent;
+    cursor: pointer;
+    transition: ease-out 0.5s;
+    border: 2px solid #FFFFFF;
+    margin: 15px 160px;
+
+}
+
+.return:hover {
+    color: white;
+    box-shadow: inset 0 -100px 0 0 #000000;
+}
+
+.return:active {
+    transform: scale(0.9);
+}
