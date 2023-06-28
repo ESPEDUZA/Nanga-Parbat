@@ -13,6 +13,7 @@ import NftPage from "./NFTpage";
 import auctionsPages from "./auctionsPages";
 import CustomNFT from "./CustomNFT";
 import Auctions from "./Auctions";
+import NotFound from "./NotFound";
 
 
 function App() {
@@ -79,6 +80,7 @@ function App() {
                 <Route path="/nfts" element={<NftPage account={accounts} />} />
                 <Route path="/customnft" element={<CustomNFT account={accounts} />} />
                 <Route path="/auctions" element={<Auctions/>} />
+                <Route path="*" element={<NotFound/>} />
             </Routes>
         </div>
     );

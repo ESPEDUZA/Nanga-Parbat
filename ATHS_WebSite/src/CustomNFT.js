@@ -3,12 +3,24 @@ import { useForm } from 'react-hook-form';
 import { useDropzone } from 'react-dropzone';
 import Web3 from 'web3';
 import { create } from 'ipfs-http-client';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+
 
 
 
 const CustomNFT = () => {
+    const [isOpen, setIsOpen] = useState(false);  // renaming from 'open' to 'isOpen'
+    const [nftData, setNftData] = useState(null);
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
+    const handleClose = () => {
+        setIsOpen(true);
+    };
     const onDrop = useCallback(acceptedFiles => {
         setFile(acceptedFiles[0]);
         setPreviewUrl(URL.createObjectURL(acceptedFiles[0]));
@@ -566,6 +578,7 @@ const CustomNFT = () => {
                 trait3: data.Trait3,
             };
 
+
             console.log(contract.methods);
             console.log(`https://ipfs.io/ipfs/${ipfsHash}`);
             console.log(`https://ipfs.io/ipfs/${metadataIpfsHash}`);
@@ -574,6 +587,7 @@ const CustomNFT = () => {
             const tx = await contract.methods.mintNFT(data.creatorAddress, `https://ipfs.io/ipfs/${metadataIpfsHash}`, nftData).send({ from: accounts[0]});
 
             console.log('NFT minted successfully');
+            setIsOpen(true);
         } catch (err) {
             console.error('Error minting NFT: ', err);
         }
@@ -606,7 +620,67 @@ const CustomNFT = () => {
                     <button type="submit" className="border p-2">Submit</button>
                 </form>
             </div>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={isOpen}
+                onClose={() => setIsOpen(false)}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+            >
+                <Fade in={isOpen}>
+                    <Box
+                        style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            backgroundColor: 'white',
+                            border: '2px solid #000',
+                            boxShadow: 24,
+                            padding: 20, // Increase padding to 20
+                        }}
+                    >
+                        <div style={{ margin: '20px' }}>  {/* Add margin around the content */}
+                            <Typography id="transition-modal-title" variant="h6" component="h2" style={{ fontFamily: 'Helvetica', marginBottom: '20px' }}>
+                                {/* Add Helvetica font and margin bottom to the title */}
+                                NFT Minted Successfully!
+                            </Typography>
+                            <Typography id="transition-modal-description" sx={{ mt: 2, fontFamily: 'Helvetica', marginBottom: '20px' }}>
+                                {/* Add Helvetica font and margin bottom to the description */}
+                                Preview:
+                                <img src={previewUrl} alt="NFT" style={{ marginBottom: '20px' }} />
+                                {/* Add margin bottom to the image */}
+                                <Button
+                                    variant="contained"
+                                    style={{
+                                        backgroundColor: 'black',
+                                        color: 'white',
+                                        fontFamily: 'Helvetica',
+                                        marginTop: '20px',
+                                        marginBottom: '20px',
+                                        display: 'block',
+                                        marginLeft: 'auto',
+                                        marginRight: 'auto'
+                                    }}
+                                    href={'https://testnets.opensea.io/account'}
+                                    target="_blank"
+                                >
+                                    {/* Style the button to be black with white text and centered */}
+                                    View on OpenSea
+                                </Button>
+                            </Typography>
+                        </div>
+                    </Box>
+                </Fade>
+
+            </Modal>
         </div>
+
+
     )
 
 
