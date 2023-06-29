@@ -15,6 +15,7 @@ import Button from '@material-ui/core/Button';
 
 const CustomNFT = () => {
     const [isOpen, setIsOpen] = useState(false);  // renaming from 'open' to 'isOpen'
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [nftData, setNftData] = useState(null);
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
@@ -26,7 +27,7 @@ const CustomNFT = () => {
         setPreviewUrl(URL.createObjectURL(acceptedFiles[0]));
     }, [])
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
-    const { register, handleSubmit } = useForm();
+    const {register, handleSubmit, reset} = useForm();
     const onSubmit = async (data) => {
         try {
 
@@ -39,7 +40,7 @@ const CustomNFT = () => {
             } else {
                 throw new Error("Non-Ethereum browser detected. You should consider trying MetaMask!");
             }
-
+            setIsSubmitting(true);
             // Create an instance of the IPFS client
             const ipfs = create({
                 host: 'ipfs.infura.io',
@@ -550,9 +551,9 @@ const CustomNFT = () => {
                 description: data.description,
                 image: `https://ipfs.io/ipfs/${ipfsHash}`,
                 attributes: [
-                    { trait_type: "Trait 1", value: data.Trait1 },
-                    { trait_type: "Trait 2", value: data.Trait2 },
-                    { trait_type: "Trait 3", value: data.Trait3 },
+                    {trait_type: "Trait 1", value: data.Trait1},
+                    {trait_type: "Trait 2", value: data.Trait2},
+                    {trait_type: "Trait 3", value: data.Trait3},
                 ],
             };
 
@@ -584,13 +585,16 @@ const CustomNFT = () => {
             console.log(`https://ipfs.io/ipfs/${metadataIpfsHash}`);
 
             // Use the IPFS URL of the metadata as the tokenURI
-            const tx = await contract.methods.mintNFT(data.creatorAddress, `https://ipfs.io/ipfs/${metadataIpfsHash}`, nftData).send({ from: accounts[0]});
+            const tx = await contract.methods.mintNFT(data.creatorAddress, `https://ipfs.io/ipfs/${metadataIpfsHash}`, nftData).send({from: accounts[0]});
 
             console.log('NFT minted successfully');
             setIsOpen(true);
+            setIsSubmitting(false);
         } catch (err) {
             console.error('Error minting NFT: ', err);
         }
+        reset();
+        setFile(null);
     };
 
     return (
@@ -598,7 +602,8 @@ const CustomNFT = () => {
             <div className="nft-info w-1/2 p-4 border-r">
                 <h1 className="NFT-title">Let's create your own NFT</h1>
                 {!file && (
-                    <div {...getRootProps()} className="w-full h-64 border-2 border-gray-300 rounded flex items-center justify-center my-4 cursor-pointer">
+                    <div {...getRootProps()}
+                         className="w-full h-64 border-2 border-gray-300 rounded flex items-center justify-center my-4 cursor-pointer">
                         <input {...getInputProps()} />
                         {
                             isDragActive ?
@@ -609,11 +614,12 @@ const CustomNFT = () => {
                 )}
                 {file && <img src={previewUrl} alt="NFT Preview" className="w-full h-64 object-cover rounded"/>}
             </div>
-            <div style={{fontFamily:'Helvetica'}} className="auction-details w-1/2 p-4">
+            <div style={{fontFamily: 'Helvetica'}} className="auction-details w-1/2 p-4">
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
                     <input {...register('name')} type="text" placeholder="NFT Name" className="border p-2"/>
                     <textarea {...register('description')} placeholder="Description" className="border p-2"/>
-                    <input {...register('creatorAddress')} type="text" placeholder="Creator Address" className="border p-2"/>
+                    <input {...register('creatorAddress')} type="text" placeholder="Creator Address"
+                           className="border p-2"/>
                     <input {...register('Trait1')} type="text" placeholder="Trait 1" className="border p-2"/>
                     <input {...register('Trait2')} type="text" placeholder="Trait 2" className="border p-2"/>
                     <input {...register('Trait3')} type="text" placeholder="Trait 3" className="border p-2"/>
@@ -641,19 +647,18 @@ const CustomNFT = () => {
                             backgroundColor: 'white',
                             border: '2px solid #000',
                             boxShadow: 24,
-                            padding: 20, // Increase padding to 20
+                            padding: 20,
                         }}
                     >
-                        <div style={{ margin: '20px' }}>  {/* Add margin around the content */}
-                            <Typography id="transition-modal-title" variant="h6" component="h2" style={{ fontFamily: 'Helvetica', marginBottom: '20px' }}>
-                                {/* Add Helvetica font and margin bottom to the title */}
-                                NFT Minted Successfully!
+                        <div style={{margin: '20px'}}>
+                            <Typography id="transition-modal-title" variant="h6" component="h2"
+                                        style={{fontFamily: 'Helvetica', marginBottom: '20px'}}>
+                                NFT Successfully Minted !
                             </Typography>
-                            <Typography id="transition-modal-description" sx={{ mt: 2, fontFamily: 'Helvetica', marginBottom: '20px' }}>
-                                {/* Add Helvetica font and margin bottom to the description */}
+                            <Typography id="transition-modal-description"
+                                        sx={{mt: 2, fontFamily: 'Helvetica', marginBottom: '20px'}}>
                                 Preview:
-                                <img src={previewUrl} alt="NFT" style={{ marginBottom: '20px' }} />
-                                {/* Add margin bottom to the image */}
+                                <img src={previewUrl} alt="NFT" style={{marginBottom: '20px'}}/>
                                 <Button
                                     variant="contained"
                                     style={{
@@ -669,21 +674,45 @@ const CustomNFT = () => {
                                     href={'https://testnets.opensea.io/account'}
                                     target="_blank"
                                 >
-                                    {/* Style the button to be black with white text and centered */}
                                     View on OpenSea
                                 </Button>
                             </Typography>
                         </div>
                     </Box>
                 </Fade>
-
+            </Modal>
+            <Modal
+                aria-labelledby="loading-modal-title"
+                aria-describedby="loading-modal-description"
+                open={isSubmitting}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+            >
+                <Fade in={isSubmitting}>
+                    <Box
+                        style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            backgroundColor: 'white',
+                            border: '2px solid #000',
+                            boxShadow: 24,
+                            padding: 20,
+                        }}
+                    >
+                        <Typography id="loading-modal-title" variant="h6" component="h2"
+                                    style={{fontFamily: 'Helvetica', marginBottom: '20px'}}>
+                            Loading...
+                        </Typography>
+                    </Box>
+                </Fade>
             </Modal>
         </div>
-
-
     )
 
-
 }
-
-export default CustomNFT;
+    export default CustomNFT;
