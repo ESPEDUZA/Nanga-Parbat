@@ -39,22 +39,35 @@ function Auctions() {
 
         const nftPromises = listedTokenIds.map(async (tokenId) => {
             const tokenURI = await contract.methods.tokenURI(tokenId).call();
-            const price = await contract.methods.getPrice(tokenId).call();
 
-            // Fetch data from tokenURI
-            const response = await fetch(tokenURI);
-            const data = await response.json();
+            try {
+                // Fetch data from tokenURI
+                const response = await fetch(tokenURI);
+                // Check if response was successful
+                if (!response.ok) {
+                    console.error(`HTTP error, status = ${response.status}, URI = ${tokenURI}`);
+                    return null;
+                }
+                const data = await response.json();
 
-            return {
-                id: tokenId,
-                price: web3.utils.fromWei(price, 'ether'), // convert price from wei to ether
-                ...data,
-                listed: true,
-            };
+                const priceInWei = await contract.methods.getPrice(tokenId).call();
+                const price = web3.utils.fromWei(priceInWei.toString(), 'ether');
+
+                return {
+                    id: tokenId,
+                    price: price, // convert price from wei to ether
+                    ...data,
+                    listed: true,
+                };
+            } catch (error) {
+                console.error(`Error fetching or parsing JSON from URI = ${tokenURI}, error =`, error);
+                return null;
+            }
         });
 
         const nfts = await Promise.all(nftPromises);
-        return nfts;
+        // Filter out any null values from failed fetch requests
+        return nfts.filter(nft => nft !== null);
     };
 
     const selectNft = (nft) => {
