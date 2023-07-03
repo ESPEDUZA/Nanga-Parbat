@@ -4,6 +4,7 @@ import './Auctions.css';
 
 
 
+
 function MyNfts() {
     const contractAddress = "0x4ffefbbbc624dcc18c48b75264940d88ea6deac3"; // remplacer par l'adresse de votre contrat
     const contractABI = [
@@ -574,6 +575,7 @@ function MyNfts() {
     const [loading, setLoading] = useState(true);
     const [account, setAccount] = useState();
     const [selectedNft, setSelectedNft] = useState(null); // Nouvel état pour le NFT sélectionné
+    const [price, setPrice] = useState(0);
 
     const web3 = new Web3(Web3.givenProvider);
     const contract = new web3.eth.Contract(contractABI, contractAddress);
@@ -593,8 +595,15 @@ function MyNfts() {
         }
     }, [account]);
 
+    const getTokensOnSale = async () => {
+        const tokensOnSale = await contract.methods.allTokensOnSale().call();
+        console.log("Tokens on sale: ", tokensOnSale);
+    };
+
     const loadNfts = async () => {
         const tokenIds = await contract.methods.tokensOfOwner(account).call();
+        const listedTokenIds = new Set(await contract.methods.allTokensOnSale().call());
+
         const nftPromises = tokenIds.map(async (tokenId) => {
             const tokenURI = await contract.methods.tokenURI(tokenId).call();
 
@@ -603,8 +612,9 @@ function MyNfts() {
             const data = await response.json();
 
             return {
+                id: tokenId,
                 ...data,
-
+                listed: listedTokenIds.has(tokenId),
             };
         });
 
@@ -615,6 +625,46 @@ function MyNfts() {
     const sellNft = (nft) => {
         setSelectedNft(nft); // Au lieu d'afficher la console, nous mettons à jour l'état du NFT sélectionné
     };
+
+    const listNft = async () => {
+        if (!selectedNft || !price) {
+            console.error('selectedNft or price is not defined!');
+            return;
+        }
+        console.log("selectedNft.id: ", selectedNft.id); // for debugging
+        console.log("price: ", price); // for debugging
+        const etherPrice = web3.utils.toWei(price, 'ether');
+        console.log("etherPrice: ", etherPrice); // for debugging
+
+        contract.methods.setForSale(selectedNft.id, etherPrice).send({ from: account })
+            .on('transactionHash', (hash) => {
+                // You can do something when the transaction is sent, like displaying a message
+                console.log('Transaction sent with hash: ', hash);
+            })
+            .on('receipt', async (receipt) => {
+                // You can do something when the transaction is confirmed, like displaying a message
+                console.log('Transaction has been confirmed with receipt: ', receipt);
+
+                // Check if the NFT is now listed for the expected price
+
+                console.log(`NFT ${selectedNft.id} is now listed for ${price} ETH.`);
+
+
+
+                // Log all tokens on sale
+                console.log(getTokensOnSale());
+
+                // Optionally, you could also refresh the NFTs in the UI
+                loadNfts().then(nfts => {
+                    setItems(nfts);
+                });
+            })
+            .on('error', (error) => {
+                // You can do something when the transaction failed, like displaying a message
+                console.log('Transaction failed with error: ', error);
+            });
+    };
+
 
     if (loading) return <div>Loading...</div>;
     if (items.length === 0) return <h1>No items in wallet</h1>;
@@ -652,11 +702,14 @@ function MyNfts() {
                     </div>
 
                     <div style={{display: 'flex', justifyContent: 'space-between', width: '100%', paddingTop: '30px'}}>
-                        <input type="text" placeholder="Enter new bid"
-                               style={{width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px'}}/>
+                        <input type="text" placeholder="Enter your price"
+                               style={{width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px'}}
+                               onChange={e => setPrice(e.target.value)}
+                        />
                         <button
-                            style={{width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px'}}>Submit
-                            Bid
+                            style={{width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px'}}
+                            onClick={listNft}
+                        >LIST NFT
                         </button>
                     </div>
 
@@ -688,7 +741,7 @@ function MyNfts() {
 
 
                     <button style={{marginTop: '50px'}} className="return" onClick={() => setSelectedNft(null)}>Go back
-                        your NFT's
+                        to your NFT's
                     </button>
                 </div>
             </div>
@@ -702,7 +755,27 @@ function MyNfts() {
             <div className="nft-items">
                 {items.map((nft, i) => (
                     <div key={i} className="nft-item">
-                        <div className="img-container"><img src={nft.image} alt={nft.name}/></div>
+                        <div className="img-container">
+                            <img src={nft.image} alt={nft.name}/>
+                            {nft.listed &&
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                    color: 'white',
+                                    fontSize: '22px',
+                                    fontWeight: '700'
+                                }}>
+                                    LISTED
+                                </div>
+                            }
+                        </div>
                         <div style={{
                             fontSize: '22px',
                             fontFamily: 'Helvetica',
@@ -717,19 +790,16 @@ function MyNfts() {
                             justifyContent: 'space-between',
                             alignItems: 'center'
                         }}>
-                            <p style={{fontSize: '22px', fontFamily: 'Helvetica', paddingTop: '22px'}}>LAST BID
-                                ETH</p>
+                            <p style={{fontSize: '22px', fontFamily: 'Helvetica', paddingTop: '22px'}}>SELL</p>
                             <a style={{fontSize: '52px', fontWeight: '700', fontFamily: 'Helvetica', cursor: 'pointer'}}
                                onClick={() => sellNft(nft)}>
                                 ...
                             </a>
                         </div>
-
                     </div>
                 ))}
             </div>
         </div>
-
     );
 }
 

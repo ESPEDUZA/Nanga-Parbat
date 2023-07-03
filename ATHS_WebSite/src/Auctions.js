@@ -180,8 +180,8 @@ function Auctions() {
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', paddingTop:'30px'}}>
-                        <input type="text" placeholder="Enter new bid" style={{ width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px' }} />
-                        <button style={{ width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px' }}>Submit Bid</button>
+                        <input type="text" placeholder="Enter you price" style={{ width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px' }} />
+                        <button style={{ width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px' }}>LIST NFT</button>
                     </div>
 
                     <h2 className="traits">Traits</h2>

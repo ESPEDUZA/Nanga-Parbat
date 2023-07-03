@@ -11,8 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
 
-
-
 const CustomNFT = () => {
     const [isOpen, setIsOpen] = useState(false);  // renaming from 'open' to 'isOpen'
     const [isSubmitting, setIsSubmitting] = useState(false);
