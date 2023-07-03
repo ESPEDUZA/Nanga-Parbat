@@ -1,163 +1,78 @@
 import React, { useEffect, useState } from 'react';
 import './Auctions.css';
+import Web3 from 'web3';
+const contractData = require('./contract.json');
 
 
 function Auctions() {
-    const [items, setItems] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [selectedNft, setSelectedNft] = useState(null); // Nouvel état pour le NFT sélectionné
 
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [account, setAccount] = useState();
+    const [selectedNft, setSelectedNft] = useState(null); // Nouvel état pour le NFT sélectionné
+    const [price, setPrice] = useState(0);
+
+    const web3 = new Web3(Web3.givenProvider);
+    const contract = new web3.eth.Contract(contractData.abi, contractData.contractAddress);
     useEffect(() => {
-        loadNfts().then(function(result) {
-            setItems(result);
-            setLoading(false);
+        web3.eth.getAccounts().then(accounts => {
+            setAccount(accounts[0]);
         });
     }, []);
 
-    const loadNfts = async () => {
-        // This function would usually fetch NFT data from a smart contract or API
-        // For now, we'll return a placeholder array of NFTs
+    useEffect(() => {
+        if (account) {
+            loadNfts().then(nfts => {
+                setItems(nfts);
+                setLoading(false);
+            });
+        }
+    }, [account]);
 
-        return [
-            {
-                image: '/0.png',
-                name: 'NFT 1',
-                description: 'This is a cool NFT',
-                price: 0.01,
-                ownerAddress: '0x821D3AA3A0A4B75EEe1A6AC9C72e8F0269D295fD',
-                creatorAddress: '0x7B987B92716dE129d67F51d16A1699D04F6c035D',
-                currentBid: '4',
-                royalties: '3.33%',
-                traits : [
-                    'crown',
-                    'hazmat',
-                    'goldblocks',
-                    'grey fur',
-                    'test'
-                ]
-            },
-            {
-                image: '/141.png',
-                name: 'NFT 2',
-                description: 'This is another cool NFT',
-                price: 0.02,
-                ownerAddress: '0x821D3AA3A0A4B75EEe1A6AC9C72e8F0269D295fD',
-                creatorAddress: '0x7B987B92716dE129d67F51d16A1699D04F6c035D',
-                currentBid: '4',
-                royalties: '3.33%',
-                traits : [
-                    'crown',
-                    'hazmat',
-                    'goldblocks',
-                    'grey fur'
-                ]
-            },
-            {
-                image: '/5555.png',
-                name: 'NFT 2',
-                description: 'This is another cool NFT',
-                price: 0.02,
-                ownerAddress: '0x821D3AA3A0A4B75EEe1A6AC9C72e8F0269D295fD',
-                creatorAddress: '0x7B987B92716dE129d67F51d16A1699D04F6c035D',
-                currentBid: '4',
-                royalties: '3.33%',
-                traits : [
-                    'crown',
-                    'hazmat',
-                    'goldblocks',
-                    'grey fur'
-                ]
-            },
-            {
-                image: '/436.png',
-                name: 'NFT 2',
-                description: 'This is another cool NFT',
-                price: 0.02,
-                ownerAddress: '0x821D3AA3A0A4B75EEe1A6AC9C72e8F0269D295fD',
-                creatorAddress: '0x7B987B92716dE129d67F51d16A1699D04F6c035D',
-                currentBid: '4',
-                royalties: '3.33%',
-                traits : [
-                    'crown',
-                    'hazmat',
-                    'goldblocks',
-                    'grey fur'
-                ]
-            },
-            {
-                image: '/333.jpeg',
-                name: 'NFT 2',
-                description: 'This is another cool NFT',
-                price: 0.02,
-                ownerAddress: '0x821D3AA3A0A4B75EEe1A6AC9C72e8F0269D295fD',
-                creatorAddress: '0x7B987B92716dE129d67F51d16A1699D04F6c035D',
-                currentBid: '4',
-                royalties: '3.33%',
-                traits : [
-                    'crown',
-                    'hazmat',
-                    'goldblocks',
-                    'grey fur'
-                ]
-            },
-            {
-                image: '/111.jpeg',
-                name: 'NFT 2',
-                description: 'This is another cool NFT',
-                price: 0.02,
-                ownerAddress: '0x821D3AA3A0A4B75EEe1A6AC9C72e8F0269D295fD',
-                creatorAddress: '0x7B987B92716dE129d67F51d16A1699D04F6c035D',
-                currentBid: '4',
-                royalties: '3.33%',
-                traits : [
-                    'crown',
-                    'hazmat',
-                    'goldblocks',
-                    'grey fur'
-                ]
-            },
-            {
-                image: '/972.png',
-                name: 'NFT 2',
-                description: 'This is another cool NFT',
-                price: 0.02,
-                ownerAddress: '0x821D3AA3A0A4B75EEe1A6AC9C72e8F0269D295fD',
-                creatorAddress: '0x7B987B92716dE129d67F51d16A1699D04F6c035D',
-                currentBid: '4',
-                royalties: '3.33%',
-                traits : [
-                    'crown',
-                    'hazmat',
-                    'goldblocks',
-                    'grey fur'
-                ]
-            },
-            {
-                image: '/1064.png',
-                name: 'NFT 2',
-                description: 'This is another cool NFT',
-                price: 0.02,
-                ownerAddress: '0x821D3AA3A0A4B75EEe1A6AC9C72e8F0269D295fD',
-                creatorAddress: '0x7B987B92716dE129d67F51d16A1699D04F6c035D',
-                currentBid: '4',
-                royalties: '3.33%',
-                traits : [
-                    'crown',
-                    'hazmat',
-                    'goldblocks',
-                    'grey fur'
-                ]
-            },
-
-        ];
+    const getTokensOnSale = async () => {
+        const tokensOnSale = await contract.methods.allTokensOnSale().call();
+        console.log("Tokens on sale: ", tokensOnSale);
     };
 
-    const buyNft = (nft) => {
+    const loadNfts = async () => {
+        const listedTokenIds = await contract.methods.allTokensOnSale().call();
+
+        const nftPromises = listedTokenIds.map(async (tokenId) => {
+            const tokenURI = await contract.methods.tokenURI(tokenId).call();
+            const price = await contract.methods.getPrice(tokenId).call();
+
+            // Fetch data from tokenURI
+            const response = await fetch(tokenURI);
+            const data = await response.json();
+
+            return {
+                id: tokenId,
+                price: web3.utils.fromWei(price, 'ether'), // convert price from wei to ether
+                ...data,
+                listed: true,
+            };
+        });
+
+        const nfts = await Promise.all(nftPromises);
+        return nfts;
+    };
+
+    const selectNft = (nft) => {
         setSelectedNft(nft); // Au lieu d'afficher la console, nous mettons à jour l'état du NFT sélectionné
     };
 
+
+    const buyNft = async () => {
+        if (!selectedNft) {
+            console.error("No NFT selected");
+            return;
+        }
+        const priceInWei = web3.utils.toWei(selectedNft.price.toString(), "ether"); // Convert price to wei
+        await contract.methods.buyToken(selectedNft.id).send({ from: account, value: priceInWei });
+    };
+
+
     if (loading) return <div>Loading...</div>;
-    if (items.length == 0) return <h1>No items for sale</h1>;
 
     // Si un NFT est sélectionné, afficher l'interface de détails
     if (selectedNft) {
@@ -167,28 +82,44 @@ function Auctions() {
                     <h1 className="NFT-title">{selectedNft.name}</h1>
                     <img src={selectedNft.image} alt={selectedNft.name} />
                     <p className="description">{selectedNft.description}</p>
-                    <p><strong style={{fontWeight:'700'}}>Owner Address :</strong> {selectedNft.ownerAddress}</p>
-                    <p><strong style={{fontWeight:'700'}}>Creator Address :</strong> {selectedNft.creatorAddress}</p>
+                    <p><strong style={{fontWeight:'700'}}>Owner Address :</strong> XXX}</p>
+                    <p><strong style={{fontWeight:'700'}}>Creator Address :</strong> XXX</p>
                 </div>
                 <div className="auction-details">
 
-                    <p className="timer">Timer : 4D 13H 4M 38S </p>
+                    <p className="timer">BUY NFT's on Art Hunters</p>
                     <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid #000', padding: '20px', fontSize: '26px', fontFamily:'Helvetica', marginTop:'20px'}}>
-                            <p><strong style={{fontWeight:'700', margin:'10px'}}>Current Bid :</strong> {selectedNft.currentBid} ETH</p>
+                            <p><strong style={{fontWeight:'700', margin:'10px'}}>Current Bid :</strong> XX ETH</p>
                             <p><strong style={{fontWeight:'700', margin:'10px'}}>Taker Fees :</strong> (1.1%) 0.011 ETH</p>
-                            <p><strong style={{fontWeight:'700', margin:'10px'}}>Royalties :</strong> {selectedNft.royalties} ETH</p>
+                            <p><strong style={{fontWeight:'700', margin:'10px'}}>Royalties :</strong> XX ETH</p>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', paddingTop:'30px'}}>
-                        <input type="text" placeholder="Enter new bid" style={{ width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px' }} />
-                        <button style={{ width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px' }}>Submit Bid</button>
+                        <p style={{ width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px' }}>PRICE : XX ETH</p>
+                        <button style={{ width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px' }} onClick={buyNft}>BUY NFT</button>
                     </div>
 
                     <h2 className="traits">Traits</h2>
-                    <div className="nft-traits" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', border: '1px solid black', padding:'15px' }}>
-                        {selectedNft.traits.map((trait, index) => (
-                            <div key={index} style={{ width: '45%', backgroundColor: '#d3d3d3', padding: '10px', margin: '10px', fontSize: '16px', fontFamily:'Helvetica', textTransform:'uppercase', textAlign:'center'}}>
-                                <p>{trait}</p>
+                    <div className="nft-traits" style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-between',
+                        border: '1px solid black',
+                        padding: '15px'
+                    }}>
+                        {selectedNft.attributes && selectedNft.attributes.length > 0 && selectedNft.attributes.map((trait, index) => (
+                            <div key={index} style={{
+                                width: '45%',
+                                backgroundColor: '#d3d3d3',
+                                padding: '10px',
+                                margin: '10px',
+                                fontSize: '16px',
+                                fontFamily: 'Helvetica',
+                                textTransform: 'uppercase',
+                                textAlign: 'center'
+                            }}>
+                                <p>{trait.trait_type}: {trait.value}</p>
                             </div>
                         ))}
                     </div>
@@ -210,8 +141,8 @@ function Auctions() {
                         <div className="img-container"><img src={nft.image} alt={nft.name} /></div>
                         <div style={{fontSize:'22px', fontFamily:'Helvetica', paddingTop:'10px', paddingBottom:'0px', fontWeight:'700'}}>{nft.name}</div>
                         <div style={{display:'flex', flexDirection:'row', flexWrap: 'wrap', justifyContent: 'space-between', alignItems:'center'}}>
-                            <p style={{fontSize:'22px', fontFamily:'Helvetica', paddingTop:'22px'}}>LAST BID : {nft.currentBid} ETH</p>
-                            <a style={{fontSize:'52px',fontWeight:'700', fontFamily:'Helvetica', cursor:'pointer'}} onClick={() => buyNft(nft)}>
+                            <p style={{fontSize:'22px', fontFamily:'Helvetica', paddingTop:'22px'}}> PRICE : {nft.price} ETH</p>
+                            <a style={{fontSize:'52px',fontWeight:'700', fontFamily:'Helvetica', cursor:'pointer'}} onClick={() => selectNft(nft)}>
                                 ...
                             </a>
                         </div>
