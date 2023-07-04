@@ -15,6 +15,7 @@ import CustomNFT from "./CustomNFT";
 import Auctions from "./Auctions";
 import NotFound from "./NotFound";
 import NftPageBis from "./NftPageBis";
+import Footer from "./Footer";
 
 
 function App() {
@@ -83,6 +84,7 @@ function App() {
                 <Route path="/auctions" element={<Auctions/>} />
                 <Route path="*" element={<NotFound/>} />
             </Routes>
+            <Footer/>
         </div>
     );
 }
