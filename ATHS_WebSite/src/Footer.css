@@ -1,0 +1,22 @@
+.footerContainer {
+    padding: 20px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: black;
+    font-family: 'Helvetica', serif;
+    margin-top: 6rem;
+    margin-bottom: 2rem;
+}
+
+
+.footerContainer::before {
+    content: "";
+    width: 80%; /* Réduire la largeur de la ligne de séparation */
+    height: 1px;
+    background-color: black;
+    margin: 10px 0; /* Ajouter une marge pour espacer la ligne des autres éléments */
+    align-self: center; /* Centrer la ligne de séparation */
+}
