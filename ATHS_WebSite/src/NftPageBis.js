@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
 import './Auctions.css';
 import contractData from "./contract.json";
-
-
+import {getAllByAltText} from "@testing-library/react";
 
 
 function MyNfts() {
@@ -20,6 +19,7 @@ function MyNfts() {
     useEffect(() => {
         web3.eth.getAccounts().then(accounts => {
             setAccount(accounts[0]);
+
         });
     }, []);
 
@@ -63,8 +63,30 @@ function MyNfts() {
         setSelectedNft(nft); // Au lieu d'afficher la console, nous mettons à jour l'état du NFT sélectionné
     };
     const unlistNft = async () => {
+        if (!selectedNft) {
+            console.error('selectedNft is not defined!');
+            return;
+        }
+        contract.methods.removeFromSale(selectedNft.id).send({ from: account })
+            .on('transactionHash', (hash) => {
+                console.log('Transaction sent with hash: ', hash);
+            })
+            .on('receipt', async (receipt) => {
+                console.log('Transaction has been confirmed with receipt: ', receipt);
+                console.log(`NFT ${selectedNft.id} is now unlisted.`);
 
-    }
+                // Log all tokens on sale
+                console.log(getTokensOnSale());
+
+                // Optionally, you could also refresh the NFTs in the UI
+                loadNfts().then(nfts => {
+                    setItems(nfts);
+                });
+            })
+            .on('error', (error) => {
+                console.log('Transaction failed with error: ', error);
+            });
+    };
     const listNft = async () => {
         if (!selectedNft || !price) {
             console.error('selectedNft or price is not defined!');
@@ -132,8 +154,8 @@ function MyNfts() {
                         fontFamily: 'Helvetica',
                         marginTop: '20px'
                     }}>
-                        <p><strong style={{fontWeight: '700', margin: '10px'}}>Current Bid
-                            :</strong> {selectedNft.currentBid} ETH</p>
+                        <p><strong style={{fontWeight: '700', margin: '10px'}}>Current Price
+                            :</strong> {selectedNft.price} ETH</p>
                         <p><strong style={{fontWeight: '700', margin: '10px'}}>Taker Fees :</strong> (1.1%) 0.011 ETH
                         </p>
                         <p><strong style={{fontWeight: '700', margin: '10px'}}>Royalties
@@ -142,7 +164,7 @@ function MyNfts() {
 
                     <div style={{display: 'flex', justifyContent: 'space-between', width: '100%', paddingTop: '30px'}}>
                         {selectedNft.listed
-                            ? <p style={{width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px'}}>Current price: XX ETH</p>
+                            ? <p style={{width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px'}}>Current price: {selectedNft.price} ETH</p>
                             : <input type="text" placeholder="Enter your price" style={{width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px'}} onChange={e => setPrice(e.target.value)}/>
                         }
                         <button
