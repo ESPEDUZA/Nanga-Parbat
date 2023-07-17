@@ -8,7 +8,7 @@
     color: black;
     font-family: 'Helvetica', serif;
     margin-top: 6rem;
-    margin-bottom: 2rem;
+
 }
 
 
@@ -17,6 +17,6 @@
     width: 80%; /* Réduire la largeur de la ligne de séparation */
     height: 1px;
     background-color: black;
-    margin: 10px 0; /* Ajouter une marge pour espacer la ligne des autres éléments */
+    margin: 2rem; /* Ajouter une marge pour espacer la ligne des autres éléments */
     align-self: center; /* Centrer la ligne de séparation */
 }

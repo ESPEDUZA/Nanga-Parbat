@@ -39,6 +39,7 @@ function Auctions() {
 
         const nftPromises = listedTokenIds.map(async (tokenId) => {
             const tokenURI = await contract.methods.tokenURI(tokenId).call();
+            console.log(`Fetching NFT data for token ID = ${tokenId}, URI = ${tokenURI}`);
 
             try {
                 // Fetch data from tokenURI
@@ -70,6 +71,8 @@ function Auctions() {
         return nfts.filter(nft => nft !== null);
     };
 
+
+
     const selectNft = (nft) => {
         setSelectedNft(nft); // Au lieu d'afficher la console, nous mettons à jour l'état du NFT sélectionné
     };
@@ -95,20 +98,20 @@ function Auctions() {
                     <h1 className="NFT-title">{selectedNft.name}</h1>
                     <img src={selectedNft.image} alt={selectedNft.name} />
                     <p className="description">{selectedNft.description}</p>
-                    <p><strong style={{fontWeight:'700'}}>Owner Address :</strong> XXX}</p>
+                    <p><strong style={{fontWeight:'700'}}>Owner Address :</strong> XXX</p>
                     <p><strong style={{fontWeight:'700'}}>Creator Address :</strong> XXX</p>
                 </div>
                 <div className="auction-details">
 
                     <p className="timer">BUY NFT's on Art Hunters</p>
                     <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid #000', padding: '20px', fontSize: '26px', fontFamily:'Helvetica', marginTop:'20px'}}>
-                            <p><strong style={{fontWeight:'700', margin:'10px'}}>Current Bid :</strong> XX ETH</p>
+                            <p><strong style={{fontWeight:'700', margin:'10px'}}>Current Price :</strong> {selectedNft.price} ETH</p>
                             <p><strong style={{fontWeight:'700', margin:'10px'}}>Taker Fees :</strong> (1.1%) 0.011 ETH</p>
-                            <p><strong style={{fontWeight:'700', margin:'10px'}}>Royalties :</strong> XX ETH</p>
+                            <p><strong style={{fontWeight:'700', margin:'10px'}}>Royalties :</strong> 0 ETH</p>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', paddingTop:'30px'}}>
-                        <p style={{ width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px' }}>PRICE : XX ETH</p>
+                        <p style={{ width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px' }}>PRICE : {selectedNft.price} ETH</p>
                         <button style={{ width: '48%', border: '1px solid #000', padding: '10px', fontSize: '16px' }} onClick={buyNft}>BUY NFT</button>
                     </div>
 
