@@ -63,7 +63,7 @@ a {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-    margin: 15px auto;
+    margin: 15px 2rem;
     position: relative;
     overflow: hidden;
 }
