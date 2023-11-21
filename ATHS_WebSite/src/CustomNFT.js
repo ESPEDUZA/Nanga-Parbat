@@ -1,14 +1,14 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDropzone } from 'react-dropzone';
 import Web3 from 'web3';
 import { create } from 'ipfs-http-client';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Backdrop from '@mui/material/Backdrop';
 const contractData = require('./contract.json');
 
 const CustomNFT = () => {
@@ -209,16 +209,18 @@ const CustomNFT = () => {
                 </Fade>
             </Modal>
             <Modal
-                aria-labelledby="loading-modal-title"
-                aria-describedby="loading-modal-description"
-                open={isSubmitting}
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={isOpen}
+                onClose={() => setIsOpen(false)}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
                 BackdropProps={{
                     timeout: 500,
                 }}
             >
-                <Fade in={isSubmitting}>
+
+            <Fade in={isSubmitting}>
                     <Box
                         style={{
                             position: 'absolute',
